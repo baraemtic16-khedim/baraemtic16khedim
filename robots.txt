@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /scratch/
+Disallow: /admin/
+Disallow: /.git/
+
+Sitemap: https://baraem-tech-achaacha.dz/sitemap.xml
