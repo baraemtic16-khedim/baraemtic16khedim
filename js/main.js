@@ -300,11 +300,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 10. زر نسخ رقم الهاتف والواتساب بضغطة واحدة (Copy Phone Number)
-    const copyPhoneBtn = document.getElementById('copyPhoneBtn');
-    const copyText = document.getElementById('copyText');
+    // 11. إبطال ومنع تقنية النسخ وحماية المحتوى (Content Protection & Copy Prevention)
+    let isAuthorizedCopy = false;
+
+    // دالة إظهار تنبيه الأمان عند محاولة النسخ
+    let toastTimeout;
+    function showSecurityToast(message = 'عذراً، نسخ ونقل محتوى الموقع محمي بحقوق الطبع والنشر لجمعية براعم التكنولوجيا 🛡️') {
+        let toast = document.getElementById('copyPreventToast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'copyPreventToast';
+            toast.className = 'copy-prevent-toast';
+            document.body.appendChild(toast);
+        }
+        toast.innerHTML = `<i class="fas fa-shield-alt"></i> <span>${message}</span>`;
+        toast.classList.add('show');
+
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2800);
+    }
+
+    // السماح بنسخ الرقم فقط عبر الزر المخصص
     if (copyPhoneBtn) {
         copyPhoneBtn.addEventListener('click', () => {
+            isAuthorizedCopy = true;
             navigator.clipboard.writeText('0696760385').then(() => {
                 if (copyText) copyText.textContent = 'تم النسخ ✓';
                 copyPhoneBtn.style.background = '#25d366';
@@ -314,14 +335,51 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (copyText) copyText.textContent = 'نسخ';
                     copyPhoneBtn.style.background = '';
                     copyPhoneBtn.style.color = '';
+                    isAuthorizedCopy = false;
                 }, 2000);
             }).catch(() => {
-                // بديل
+                isAuthorizedCopy = false;
             });
         });
     }
 
-    // 11. تحسينات وتأكيدات الأمان الصارمة (Security Best Practices Enforcement)
+    // إبطال أحداث النسخ والقص
+    document.addEventListener('copy', (e) => {
+        if (!isAuthorizedCopy) {
+            e.preventDefault();
+            showSecurityToast('المحتوى محمي بحقوق النشر لجمعية براعم التكنولوجيا 🔒');
+        }
+    });
+
+    document.addEventListener('cut', (e) => {
+        e.preventDefault();
+        showSecurityToast('المحتوى محمي ضد النسخ والقص 🔒');
+    });
+
+    // إبطال القائمة بالنقر الأيمن (Right-Click Context Menu)
+    document.addEventListener('contextmenu', (e) => {
+        // السماح بالحقول القابلة للكتابة فقط
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            showSecurityToast('خيارات النسخ والزر الأيمن معطلة لحماية المحتوى 🛡️');
+        }
+    });
+
+    // إبطال اختصارات لوحة المفاتيح الخاصة بالنسخ وحفظ الصفحة (Ctrl+C, Ctrl+U, Ctrl+S)
+    document.addEventListener('keydown', (e) => {
+        const isCtrlOrMeta = e.ctrlKey || e.metaKey;
+        // Ctrl+C, Ctrl+X, Ctrl+U, Ctrl+S
+        if (isCtrlOrMeta && ['c', 'C', 'x', 'X', 'u', 'U', 's', 'S'].includes(e.key)) {
+            // استثناء حقول الإدخال
+            const activeTag = document.activeElement ? document.activeElement.tagName : '';
+            if (activeTag !== 'INPUT' && activeTag !== 'TEXTAREA') {
+                e.preventDefault();
+                showSecurityToast('خاصية النسخ معطلة لحماية حقوق المحتوى 🔒');
+            }
+        }
+    });
+
+    // 12. تحسينات وتأكيدات الأمان الصارمة وسلاسة الموقع (Security & Smooth Usability)
     try {
         if (window.top !== window.self) {
             window.top.location = window.self.location;

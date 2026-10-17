@@ -60,6 +60,25 @@ body {
     position: relative;
     min-height: 100vh;
     -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+/* استثناء حقول الإدخال لتجربة مستخدم سلسة */
+input, textarea {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+/* منع سحب الصور */
+img {
+    -webkit-user-drag: none;
+    user-select: none;
 }
 
 /* خلفية تكنولوجية ذكية وشبكة ناعمة */
@@ -174,70 +193,103 @@ body {
     transform: translateY(-2px);
 }
 
-/* شريط الإعلانات العاجلة */
-.announcement-bar {
-    background: linear-gradient(90deg, #09172f 0%, #0e2448 50%, #09172f 100%);
-    border-bottom: 1px solid rgba(0, 242, 254, 0.2);
-    padding: 8px 0;
-    font-size: 0.9rem;
-    position: relative;
-    z-index: 1001;
-}
-
-.announcement-inner {
-    display: flex;
+/* شريط تأكيد الأمان والوظيفة السلسة في الواجهة الرئيسية */
+.site-security-badge-banner {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 15px;
+    justify-content: center;
+    gap: 12px;
+    background: rgba(13, 27, 51, 0.75);
+    border: 1px solid rgba(0, 242, 254, 0.28);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--radius-full);
+    padding: 8px 20px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
     flex-wrap: wrap;
 }
 
-.announcement-badge {
+.sec-badge-item {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(0, 242, 254, 0.15);
-    color: var(--accent-cyan);
-    padding: 3px 12px;
-    border-radius: var(--radius-full);
-    font-weight: 700;
-    font-size: 0.8rem;
-    border: 1px solid rgba(0, 242, 254, 0.3);
-}
-
-.pulse-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--accent-emerald);
-    box-shadow: 0 0 10px var(--accent-emerald);
-    animation: blink 1.4s infinite;
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.3; transform: scale(0.8); }
-}
-
-.announcement-text {
-    flex: 1;
-    color: #e2e8f0;
+    font-size: 0.88rem;
     font-weight: 600;
+    color: #e2e8f0;
 }
 
-.announcement-link {
+.sec-badge-item i {
     color: var(--accent-cyan);
-    font-weight: 700;
-    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.sec-badge-sep {
+    color: rgba(56, 189, 248, 0.4);
+    font-size: 0.8rem;
+}
+
+/* شارات الأمان في استمارة التسجيل */
+.registration-trust-pills {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+    margin-bottom: 25px;
+}
+
+.trust-pill-tag {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    transition: var(--transition);
+    gap: 8px;
+    background: rgba(0, 242, 254, 0.08);
+    border: 1px solid rgba(0, 242, 254, 0.25);
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.announcement-link:hover {
+.trust-pill-tag i {
+    color: var(--accent-cyan);
+}
+
+/* إشعار منع النسخ الأنيق (Copy Prevention Toast) */
+.copy-prevent-toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(10, 21, 40, 0.95);
+    border: 1px solid var(--accent-cyan);
     color: #fff;
-    transform: translateX(-4px);
+    padding: 12px 24px;
+    border-radius: var(--radius-full);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 242, 254, 0.3);
+    font-weight: 600;
+    font-size: 0.92rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 99999;
+    opacity: 0;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+}
+
+.copy-prevent-toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.copy-prevent-toast i {
+    color: var(--accent-gold);
+    font-size: 1.1rem;
 }
 
 /* شريط التنقل (Header / Navbar) */
